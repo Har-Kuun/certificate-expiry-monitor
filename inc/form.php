@@ -4,14 +4,14 @@
     <fieldset>
 
       <div class="form-group">
-        <label class="col-md-1 control-label" for="domains">Domains</label>
+        <label class="col-md-1 control-label" for="domains">域名</label>
         <div class="col-md-5">                     
           <textarea class="form-control" required="true"  rows=6 id="domains" name="domains" placeholder="example.org"></textarea>
         </div>
       </div>
 
       <div class="form-group">
-        <label class="col-md-1 control-label" for="email">Email</label>  
+        <label class="col-md-1 control-label" for="email">邮箱</label>  
         <div class="col-md-5">
           <input id="email" name="email" required="true" type="email" placeholder="请输入您的邮箱" class="form-control input-md" >
         </div>
