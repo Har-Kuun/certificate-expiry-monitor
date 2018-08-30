@@ -1,6 +1,6 @@
 <div id='sslform'>
   <form class="form-horizontal" action="add.php" method="POST">
-    <p>Please enter the domain(s) you want to monitor for certificate expiry. You can add max. 20 domains at once.<br></p>
+    <p>请输入您想进行证书过期检测的域名，最多20个。<br></p>
     <fieldset>
 
       <div class="form-group">
@@ -13,14 +13,14 @@
       <div class="form-group">
         <label class="col-md-1 control-label" for="email">Email</label>  
         <div class="col-md-5">
-          <input id="email" name="email" required="true" type="email" placeholder="Enter a valid email address" class="form-control input-md" >
+          <input id="email" name="email" required="true" type="email" placeholder="请输入您的邮箱" class="form-control input-md" >
         </div>
       </div>
 
       <div class="form-group">
         <div class="col-md-4">
           <label class="col-md-2 col-md-offset-1 control-label" for="s"></label>
-          <button id="s" name="s" class="btn btn-primary">Submit</button>
+          <button id="s" name="s" class="btn btn-primary">提交</button>
         </div>
       </div>
     </fieldset>
