@@ -40,7 +40,7 @@ function get_raw_chain($host,$port=443) {
         $data["chain"][$key] = $value;
       } 
     } else {
-      $data["error"] = ["Chain too long."];
+      $data["error"] = ["证书链过长。"];
       return $data;
     }
   }
