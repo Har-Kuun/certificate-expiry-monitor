@@ -20,7 +20,7 @@
 
 <p>这个工具能够让您记住SSL证书的过期时间。在下面输入您的网站，我们将检测您的网站证书的过期时间，并在其过期前给您发送邮件提醒。 <br>这样，您就不会忘记给证书续费了。<br></p>
 
-<p>这是一个开源程序，如果您在使用中遇到任何问题，欢迎在这里向我们汇: <a href="https://github.com/RaymiiOrg/certificate-expiry-monitor">Github</a>.
+<p>这是一个开源程序，如果您在使用中遇到任何问题，欢迎在这里向我们汇报: <a href="https://github.com/RaymiiOrg/certificate-expiry-monitor">Github</a>.
 
 <hr>
 
