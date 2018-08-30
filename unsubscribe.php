@@ -29,7 +29,7 @@ if ( isset($_GET['id']) && !empty($_GET['id'])  ) {
     $cron = htmlspecialchars($_GET['cron']);
   } 
   if ($cron = "auto") {
-    $userip = "Removed automatically because to many errors occured.";
+    $userip = "错误；已自动取消订阅。";
   }
   $uuid_pattern = "/([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})/";
   if (preg_match($uuid_pattern, $id)) {
@@ -43,19 +43,19 @@ if ( isset($_GET['id']) && !empty($_GET['id'])  ) {
       }
     } else {
       echo "<div class='alert alert-success' role='alert'>";
-      echo "Check removed. You will no longer receive notifications on certificate expiration events for this domain.<br>";
+      echo "已取消检测；您将不会收到关于该域名的证书到期的邮件提醒。<br>";
       echo "</div>";
     }
   } else {
       echo "<div class='alert alert-danger' role='alert'>";;
-      echo "Error. ID is invalid.<br>";
-      echo "Please return and try again.<br>";
+      echo "错误。验证码无效。<br>";
+      echo "请返回重试。<br>";
       echo "</div>";
   }
 } else {
   echo "<div class='alert alert-danger' role='alert'>";;
-  echo "Error. ID is required.<br>";
-  echo "Please return and try again.<br>";
+  echo "错误。需要验证码。<br>";
+  echo "请返回重试。<br>";
   echo "</div>";
 }
 
