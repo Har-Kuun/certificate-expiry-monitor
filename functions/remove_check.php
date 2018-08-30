@@ -23,28 +23,28 @@ function remove_domain_check($id,$visitor_ip) {
 
     $deleted_check_json_file = file_get_contents($deleted_check_file);
     if ($file === FALSE) {
-        $result['errors'][] = "Can't open database.";
+        $result['errors'][] = "无法打开数据库。";
         return $result;
     }
     $deleted_check_json_a = json_decode($deleted_check_json_file, true);
     if ($deleted_check_json_a === null && json_last_error() !== JSON_ERROR_NONE) {
-        $result['errors'][] = "Can't read database: " . htmlspecialchars(json_last_error());
+        $result['errors'][] = "无法读取数据库: " . htmlspecialchars(json_last_error());
         return $result;
     }
 
     $file = file_get_contents($check_file);
     if ($file === FALSE) {
-        $result['errors'][] = "Can't open database.";
+        $result['errors'][] = "无法打开数据库。";
         return $result;
     }
     $json_a = json_decode($file, true);
     if ($json_a === null && json_last_error() !== JSON_ERROR_NONE) {
-        $result['errors'][] = "Can't read database: " . htmlspecialchars(json_last_error());
+        $result['errors'][] = "无法读取数据库: " . htmlspecialchars(json_last_error());
         return $result;
     }
 
     if (!is_array($json_a[$id]) ) {
-      $result['errors'][] = "Can't find record in database for: " . htmlspecialchars($id);
+      $result['errors'][] = "无法在数据库中找到该记录: " . htmlspecialchars($id);
         return $result;
     }
 
@@ -64,7 +64,7 @@ function remove_domain_check($id,$visitor_ip) {
         if(file_put_contents($deleted_check_file, $deleted_json, LOCK_EX)) {
             $result['success'][] = true;
         } else {
-            $result['errors'][] = "Can't write database.";
+            $result['errors'][] = "无法写入数据库。";
             return $result;
         }
 
@@ -73,15 +73,15 @@ function remove_domain_check($id,$visitor_ip) {
         if(file_put_contents($check_file, $check_json, LOCK_EX)) {
             $result['success'][] = true;
         } else {
-            $result['errors'][] = "Cannot write database.";
+            $result['errors'][] = "无法写入数据库。";
             return $result;
         }
 
         $link = "https://" . $current_link . "/";
 
         $to      = $deleted_json_a[$id]['email'];
-        $subject = "Certificate Expiry Monitor subscription removed for " . htmlspecialchars($deleted_json_a[$id]['domain']) . ".";
-        $message = "Hello,\r\n\r\nYou have removed the subscription of a  website to the Certificate Expiry Monitor.\r\n\r\nDomain: " . trim(htmlspecialchars($deleted_json_a[$id]['domain'])) . "\r\nEmail: " . trim(htmlspecialchars($deleted_json_a[$id]['email'])) . "\r\nIP subscription removed from: " . htmlspecialchars($visitor_ip) . "\r\nDate subscribed removed: " . date("Y-m-d H:i:s") . "\r\n\r\nWe will not monitor this website any longer and you will not receive any emails whatsoever from us again for this domain. Do note that you might miss an expiring certificate.\r\n\r\nTo re-subscribe this domain please add it again on the Certificate Expiry Monitor website: \r\n\r\n  " . $link . "\r\n\r\nHave a nice day,\r\nThe Certificate Expiry Monitor Service.\r\nhttps://" . $current_link . "";
+        $subject = "域名 " . htmlspecialchars($deleted_json_a[$id]['domain']) . "的网站证书过期检测提醒服务已取消";
+        $message = "您好，\r\n\r\n您的网站证书过期提醒服务已经取消。\r\n\r\n域名: " . trim(htmlspecialchars($deleted_json_a[$id]['domain'])) . "\r\n邮箱: " . trim(htmlspecialchars($deleted_json_a[$id]['email'])) . "\r\nIP地址: " . htmlspecialchars($visitor_ip) . "\r\n日期: " . date("Y-m-d H:i:s") . "\r\n\r\n我们将不再检测该网站的证书过期时间，您也不会再收到关于该网站的证书过期提醒。\r\n\r\n如果您想重新添加该域名，请访问我们的网站: \r\n\r\n  " . $link . "\r\n\r\n祝您健康愉快,\r\n网站证书过期检测提醒 by 香菇肥牛\r\nhttps://" . $current_link . "";
         $message = wordwrap($message, 70, "\r\n");
         $headers = 'From: noreply@' . $current_domain . "\r\n" .
             'Reply-To: noreply@' . $current_domain . "\r\n" .
@@ -94,7 +94,7 @@ function remove_domain_check($id,$visitor_ip) {
         if (mail($to, $subject, $message, $headers) === true) {
             $result['success'][] = true;
         } else {
-            $result['errors'][] = "Can't send email.";
+            $result['errors'][] = "无法发送邮件。";
             return $result;
         }
         return $result;
