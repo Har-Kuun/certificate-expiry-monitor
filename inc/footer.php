@@ -19,7 +19,7 @@
 <div class="navbar navbar-fixed-bottom">
     <div class="footer">
       <div class="col-md-10 col-md-offset-1 container">
-      <p class="text-muted">By <a href="https://raymii.org/">Remy van Elst</a>. License: GNU AGPLv3. <a href="https://github.com/RaymiiOrg/certificate-expiry-monitor">Source code</a>. <strong><a href="https://cipherli.st/">Strong SSL Ciphers & Config settings @ Cipherli.st</a></strong>. Version: <?php echo $version; ?></p>
+      <p class="text-muted">By <a href="https://raymii.org/">Remy van Elst</a>. Translated by <a href="https://qing.su">香菇肥牛</a> License: GNU AGPLv3. <a href="https://github.com/RaymiiOrg/certificate-expiry-monitor">源代码</a>. 版本: <?php echo $version; ?></p>
       </div>
     </div>
   </div>
