@@ -36,19 +36,19 @@ if ( isset($_GET['id']) && !empty($_GET['id'])  ) {
       }
     } else {
       echo "<div class='alert alert-success' role='alert'>";
-      echo "Check added. You will now receive notifications on certificate expiration events as described in the FAQ.<br>";
+      echo "域名已添加。您将在某些时间点收到网站证书到期的邮件提醒，详情请见常见问题部分。 <br>";
       echo "</div>";
     }
   } else {
       echo "<div class='alert alert-danger' role='alert'>";;
-      echo "Error. ID is invalid.<br>";
-      echo "Please return and try again.<br>";
+      echo "错误。验证码无效。<br>";
+      echo "请返回重试。<br>";
       echo "</div>";
   }
 } else {
   echo "<div class='alert alert-danger' role='alert'>";;
-  echo "Error. ID is required.<br>";
-  echo "Please return and try again.<br>";
+  echo "错误。需要验证码。<br>";
+  echo "请返回重试。<br>";
   echo "</div>";
 }
 
