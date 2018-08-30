@@ -1,5 +1,9 @@
 # Certificate Expiry Monitor
 
+This is the Chinese-simplified version of the original Certficate Expiry Monitor.  Example site: https://ssl.qing.su/
+
+Version 1.3 was forked and translated.  Other codes were kept untouched.
+
 ## About
 
 Certificate Expiry Monitor is an open source monitoring tool for certificates. It monitors websites and emails you when the certificates are about to expire.
