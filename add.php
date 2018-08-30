@@ -29,7 +29,7 @@ if ( isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['domains'
   if (validate_email($_POST['email'])) {
     $email = htmlspecialchars($_POST['email']);
   } else {
-    $errors[] = "Invalid email address.";
+    $errors[] = "邮箱地址无效。";
   }
 
   $domains = validate_domains($_POST['domains']);
@@ -46,10 +46,10 @@ if ( isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['domains'
       echo htmlspecialchars($value);
       echo "</div>";
     }
-    echo "Please return and try again.<br>";
+    echo "请返回重试。<br>";
   } elseif ( is_array($errors) && count($errors) == 0 && is_array($domains['domains']) && count($domains['domains']) != 0 && count($domains['domains']) < 21) {
     echo "<div class='alert alert-info' role='alert'>";
-    echo "Email: " . htmlspecialchars($email) . ".<br>";
+    echo "邮箱: " . htmlspecialchars($email) . ".<br>";
     echo "</div>";
     foreach ($domains['domains'] as $key => $value) {
       $userip = $_SERVER["HTTP_X_FORWARDED_FOR"] ? $_SERVER["HTTP_X_FORWARDED_FOR"] : $_SERVER["REMOTE_ADDR"];
@@ -63,21 +63,21 @@ if ( isset($_POST['email']) && !empty($_POST['email']) && isset($_POST['domains'
         }
       } else {
         echo "<div class='alert alert-success' role='alert'>";
-        echo "Confirmation email sent. Please confirm your subscription email to complete the process.<br>";
+        echo "已向您的邮箱发送确认邮件。请点击确认邮件中的链接以启用证书过期检测。<br>";
         echo "</div>";
       }
     }
   } else {
     echo "<div class='alert alert-danger' role='alert'>";
-    echo "Too many domains.<br>";
-    echo "Please return and try again.<br>";
+    echo "域名太多。<br>";
+    echo "请返回重试。<br>";
     echo "</div>";
   }
 } else {
 
   echo "<div class='alert alert-danger' role='alert'>";;
-  echo "Error. Domain(s) and email address are required.<br>";
-  echo "Please return and try again.<br>";
+  echo "错误。请输入域名和邮箱。<br>";
+  echo "请返回重试。<br>";
   echo "</div>";
 }
 
