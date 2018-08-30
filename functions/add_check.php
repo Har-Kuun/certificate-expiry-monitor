@@ -23,38 +23,38 @@ function add_domain_check($id,$visitor_ip) {
 
     $pre_check_json_file = file_get_contents($pre_check_file);
     if ($file === FALSE) {
-        $result['errors'][] = "Can't open database.";
+        $result['errors'][] = "无法打开数据库。";
         return $result;
     }
     $pre_check_json_a = json_decode($pre_check_json_file, true);
     if ($pre_check_json_a === null && json_last_error() !== JSON_ERROR_NONE) {
-        $result['errors'][] = "Can't read database: " . htmlspecialchars(json_last_error());
+        $result['errors'][] = "无法读取数据库: " . htmlspecialchars(json_last_error());
         return $result;
     }
 
     if (!is_array($pre_check_json_a[$id]) ) {
-      $result['errors'][] = "Can't find record in database for: " . htmlspecialchars($id);
+      $result['errors'][] = "无法在数据库中找到该记录: " . htmlspecialchars($id);
         return $result;
     }
 
     $file = file_get_contents($check_file);
     if ($file === FALSE) {
-        $result['errors'][] = "Can't open database.";
+        $result['errors'][] = "无法打开数据库。";
         return $result;
     }
     $json_a = json_decode($file, true);
     if ($json_a === null && json_last_error() !== JSON_ERROR_NONE) {
-        $result['errors'][] = "Can't read database: " . htmlspecialchars(json_last_error());
+        $result['errors'][] = "无法读取数据库: " . htmlspecialchars(json_last_error());
         return $result;
     }
 
     foreach ($json_a as $key => $value) {
       if ($key == $id) {
-          $result['errors'][] = "Domain/email combo for  " . htmlspecialchars($pre_check_json_a[$id]['domain']) . " already exists.";
+          $result['errors'][] = "该域名/邮箱组合  " . htmlspecialchars($pre_check_json_a[$id]['domain']) . " 已存在。";
           return $result;
       }
       if ($value["domain"] == $pre_check_json_a[$id]['domain'] && $value["email"] == $pre_check_json_a[$id]['email']) {
-          $result['errors'][] = "Domain / email combo for  " . htmlspecialchars($pre_check_json_a[$id]['domain']) . " already exists.";
+          $result['errors'][] = "该域名/邮箱组合  " . htmlspecialchars($pre_check_json_a[$id]['domain']) . " 已存在。";
           return $result;
       }
     }
@@ -77,7 +77,7 @@ function add_domain_check($id,$visitor_ip) {
     if(file_put_contents($check_file, $json, LOCK_EX)) {
         $result['success'][] = true;
     } else {
-        $result['errors'][] = "Can't write database.";
+        $result['errors'][] = "无法写入数据库。";
         return $result;
     }
 
@@ -86,31 +86,31 @@ function add_domain_check($id,$visitor_ip) {
     if(file_put_contents($pre_check_file, $pre_check_json, LOCK_EX)) {
         $result['success'][] = true;
     } else {
-        $result['errors'][] = "Can't write database.";
+        $result['errors'][] = "无法写入数据库。";
         return $result;
     }
 
     $unsublink = "https://" . $current_link . "/unsubscribe.php?id=" . $id;
 
     $to      = $json_a[$id]['email'];
-    $subject = "Certificate Expiry Monitor subscription confirmed for " . htmlspecialchars($json_a[$id]['domain']) . ".";
-    $message = "Hello,
+    $subject = "网站证书过期检测提醒已确认: " . htmlspecialchars($json_a[$id]['domain']) . ".";
+    $message = "您好,
 
-Someone, hopefully you, has confirmed the subscription of their website to the Certificate Expiry Monitor. This is a service which monitors an SSL certificate on a website, and notifies you when it is about to expire. This extra notification helps you remember to renew your certificate on time.
+我们已收到您申请使用我们的证书过期检测提醒服务的请求，并且我们已经确认了您的网站。
   
-Domain : " . trim(htmlspecialchars($json_a[$id]['domain'])) . "
-Email  : " . trim(htmlspecialchars($json_a[$id]['email'])) . "
-IP subscription confirmed from: " . htmlspecialchars($visitor_ip) . "
-Date subscribed confirmed: " . date("Y-m-d H:i:s T") . "
+域名   : " . trim(htmlspecialchars($json_a[$id]['domain'])) . "
+邮箱   : " . trim(htmlspecialchars($json_a[$id]['email'])) . "
+IP地址 : " . htmlspecialchars($visitor_ip) . "
+日期   : " . date("Y-m-d H:i:s T") . "
 
-We will monitor the certificates for this website. You will receive emails when it is about to expire as described in the FAQ on our website. You can view the FAQ here: https://" . $current_link . ".
+我们将为您检测该网站的证书。您将在证书即将过期时收到我们的邮件提醒。您可以点击以下链接查看常见问题: https://" . $current_link . ".
 
-To unsubscribe from notifications for this domain please click or copy and paste the below link in your browser:
+如果您不再希望收到我们的邮件提醒，可以点击下面的链接取消订阅: 
 
   " . $unsublink . "
 
-Have a nice day,
-The Certificate Expiry Monitor Service.
+祝您健康顺利!
+网站证书过期检测提醒 by 香菇肥牛
 https://" . $current_link . "";
     $message = wordwrap($message, 70, "\r\n");
     $headers = 'From: noreply@' . $current_domain . "\r\n" .
@@ -126,7 +126,7 @@ https://" . $current_link . "";
     if (mail($to, $subject, $message, $headers) === true) {
         $result['success'][] = true;
     } else {
-        $result['errors'][] = "Can't send email.";
+        $result['errors'][] = "发送邮件失败。";
         return $result;
     }
 
