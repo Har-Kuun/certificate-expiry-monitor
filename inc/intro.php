@@ -16,11 +16,11 @@
 
 ?>
 
-<p>SSL Certificates expire within a certain timeframe. Most of the time it is one year, sometimes it is longer or shorter.<br> Do you remember all the certificates you have and when you've bought them? Probably not. <br></p>
+<p>所有的SSL证书都会过期，通常过期时间是一年，有时更短或更长。<br> 您是否能记住您网站的所有SSL证书过期的时间呢？恐怕不能………… <br></p>
 
-<p>This tool will help you remember when your certificates expire. Enter one or more websites below, we'll then monitor these sites and notify you a few times before they expire. <br>This way, you'll never forget to renew your certificates.<br></p>
+<p>这个工具能够让您记住SSL证书的过期时间。在下面输入您的网站，我们将检测您的网站证书的过期时间，并在其过期前给您发送邮件提醒。 <br>这样，您就不会忘记给证书续费了。<br></p>
 
-<p>This is open source software. If you encounter any issues, please report them <a href="https://github.com/RaymiiOrg/certificate-expiry-monitor">here</a>.
+<p>这是一个开源程序，如果您在使用中遇到任何问题，欢迎在这里向我们汇: <a href="https://github.com/RaymiiOrg/certificate-expiry-monitor">Github</a>.
 
 <hr>
 
