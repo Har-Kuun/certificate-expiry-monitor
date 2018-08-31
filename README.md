@@ -68,7 +68,7 @@ Also change the `$current_domain` variable, it is used in all the email addresse
 
 And `$current_link`, which may or may not be the same. It is used in the confirm and unsubscribe links, and depends on your webserver configuration. `example.com/subdir` here means your unsubscribe links will start `https://example.com/subdir/unsubscribe.php`.
 
-更改`$current_domain`参数为您网站的地址
+更改`$current_link`参数为您网站的地址
 
     $current_link = "ssl.qing.su";
 
