@@ -88,6 +88,7 @@ function remove_domain_check($id,$visitor_ip) {
             'Return-Path: noreply@' . $current_domain . "\r\n" .
             'X-Visitor-IP: ' . $visitor_ip . "\r\n" .
             'X-Coffee: Black' . "\r\n" .
+            'Content-Type: text/html; charset=UTF-8' . "\r\n" .
             'List-Unsubscribe: <https://' . $current_link . "/unsubscribe.php?id=" . $id . ">" . "\r\n" .
             'X-Mailer: PHP/4.1.1';
 
