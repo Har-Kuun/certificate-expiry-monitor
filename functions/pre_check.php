@@ -14,6 +14,18 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
+
+set_include_path("." . PATH_SEPARATOR . ($UserDir = dirname($_SERVER['DOCUMENT_ROOT'])) . "/pear/php" . PATH_SEPARATOR . get_include_path());
+require_once "Mail.php";
+
+$host = "ssl://smtp.sendgrid.net";
+$username = "apikey";
+$password = "xx.xxxxxxxx";
+$port = "465";
+$email_from = "noreply@example.com";
+$replyto_address = "info@example.com";
+
 function add_domain_to_pre_check($domain,$email,$visitor_ip) {
     global $current_domain;
     global $current_link;
@@ -79,22 +91,17 @@ function add_domain_to_pre_check($domain,$email,$visitor_ip) {
     $subject = "请确认域名 " . htmlspecialchars($domain) . " 的网站证书过期提醒";
     $message = "您好，\r\n\r\n您申请使用网站证书过期检测提醒服务。\r\n\r\n请点击链接确认该服务。如果您没有申请过我们的服务，请无视这封邮件。\r\n\r\n\r\n域名: " . trim(htmlspecialchars($domain)) . "\r\n邮箱: " . trim(htmlspecialchars($email)) . "\r\nIP地址: " . htmlspecialchars($visitor_ip) . "\r\n日期: " . date("Y-m-d H:i:s T") . "\r\n\r\n请点击下面的链接确认使用我们的服务: \r\n\r\n" . $sublink . "\r\n\r\n\r\n祝您健康愉快,\r\n网站证书过期检测提醒 by 香菇肥牛";
     $message = wordwrap($message, 70, "\r\n");
-    $headers = 'From: noreply@' . $current_domain . "\r\n" .
-        'Reply-To: noreply@' . $current_domain . "\r\n" .
-        'Return-Path: noreply@' . $current_domain . "\r\n" .
-        'X-Visitor-IP: ' . $visitor_ip . "\r\n" .
-        'X-Coffee: Black' . "\r\n" .
-        'Content-Type: text/html; charset=UTF-8' . "\r\n" .
-        'List-Unsubscribe: <https://' . $current_link . "/unsubscribe.php?id=" . $uuid . ">" . "\r\n" .
-        'X-Mailer: PHP/4.1.1';
+    $headers = array ('From' => $email_from, 'To' => $to, 'Subject' => $subject, 'Reply-To' => $replyto_address, 'Content-Type'  => 'text/html; charset=UTF-8', 'X-Visitor-IP' => $visitor_ip, 'List-Unsubscribe' => $unsublink);
 
-    
+    $smtp = Mail::factory('smtp', array ('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
+    $mail = $smtp->send($to, $headers, $message);
 
-    if (mail($to, $subject, $message, $headers) === true) {
-        $result['success'][] = true;
+    if (PEAR::isError($mail)) {
+      echo("<p>邮件发送失败 " . $mail->getMessage() . "</p>");
+      return false;
     } else {
-        $result['errors'][] = "无法发送邮件。";
-        return $result;
+      echo("<p>邮件发送成功！</p>");
+      return true;
     }
 
     return $result;
