@@ -14,6 +14,18 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
+
+set_include_path("." . PATH_SEPARATOR . ($UserDir = dirname($_SERVER['DOCUMENT_ROOT'])) . "/pear/php" . PATH_SEPARATOR . get_include_path());
+require_once "Mail.php";
+
+$host = "ssl://smtp.sendgrid.net";
+$username = "apikey";
+$password = "xx.xxxxxxxx";
+$port = "465";
+$email_from = "noreply@example.com";
+$replyto_address = "info@example.com";
+
 function validate_email($email) {
   if (!filter_var(mb_strtolower($email), FILTER_VALIDATE_EMAIL)) {
     return false;
@@ -49,22 +61,19 @@ function send_error_mail($domain, $email, $errors) {
       $subject = "证书检测 " . htmlspecialchars($domain) . " failed.";
       $message = "您好,\r\n\r\n您之前申请了域名 " . htmlspecialchars($domain) . " 的网站证书检测服务。\r\n\r\n我们今天在检测您的域名时遇到了错误： \r\n\r\n域名: " . htmlspecialchars($domain) . "\r\n错误: " . htmlspecialchars($errors) . "\r\n\r\nFailure(s): " . htmlspecialchars($failures) . "\r\n\r\n请您检查该网站或证书的状态。如果我们连续七天检测到该网站证书的错误，我们将取消该域名的证书检测服务。若您在七天内恢复，错误检测的时间计数器将充值。\r\n\r\n如果您不想再收到我们的提醒邮件，请点击下面的链接取消订阅:\r\n\r\n" . $unsublink . "\r\n\r\n\r\n 祝您健康愉快,\r\n网站证书过期检测提醒 by 香菇肥牛\r\nhttps://" . $current_link . "";
       $message = wordwrap($message, 70, "\r\n");
-      $headers = 'From: noreply@' . $current_domain . "\r\n" .
-          'Content-Type: text/html; charset=UTF-8' . "\r\n" .
-          'Reply-To: noreply@' . $current_domain . "\r\n" .
-          'Return-Path: noreply@' . $current_domain . "\r\n" .
-          'X-Visitor-IP: ' . $visitor_ip . "\r\n" .
-          'X-Coffee: Black' . "\r\n" .
-          'List-Unsubscribe: <https://' . $current_link . "/unsubscribe.php?id=" . $id . ">" . "\r\n" .
-          'X-Mailer: PHP/4.1.1';  
+      $headers = array ('From' => $email_from, 'To' => $to, 'Subject' => $subject, 'Reply-To' => $replyto_address, 'Content-Type'  => 'text/html; charset=UTF-8', 'X-Visitor-IP' => $visitor_ip, 'List-Unsubscribe' => $unsublink);
 
-      if (mail($to, $subject, $message, $headers) === true) {
-          echo "\t\t邮件已发送至 $to.\n";
-          return true;
+      $smtp = Mail::factory('smtp', array ('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
+      $mail = $smtp->send($to, $headers, $message);
+
+      if (PEAR::isError($mail)) {
+        echo("<p>邮件发送失败 " . $mail->getMessage() . "</p>");
+        return false;
       } else {
-          echo "\t\t无法发送邮件。\n";
-          return false;
+        echo("<p>Message successfully sent!</p>");
+        return true;
       }
+
     } 
   }
 }
@@ -110,22 +119,19 @@ function send_cert_expired_email($days, $domain, $email, $raw_cert) {
       $subject = "网站 " . htmlspecialchars($domain) . " 的证书已于 " . htmlspecialchars($days) . " 天前过期";
       $message = "您好，\r\n\r\n您之前申请了域名 " . htmlspecialchars($domain) . " 的网站证书过期提醒服务。\r\n\r\n我们发现，下列域名证书链中的某一证书已于 " . htmlspecialchars($days) . " 前过期:\r\n\r\n域名: " . htmlspecialchars($domain) . "\r\n证书通用名: " . htmlspecialchars($cert_cn) . "\r\n证书标题: " . htmlspecialchars($cert_subject) . "\r\n证书序列号: " . htmlspecialchars($cert_serial) . "\r\n证书有效期始于: " . htmlspecialchars(date("Y-m-d  H:i:s T", $cert_validfrom_date)) . " (" . $cert_valid_days_ago . " 天前)\r\n证书有效期止于: " . htmlspecialchars(date("Y-m-d  H:i:s T", $cert_expiry_date)) . " (" . $cert_valid_days_ahead . " 天前)\r\n\r\n请尽快续费或更换您的证书。\r\n\r该网站目前处于错误状态，所有访客皆能看到您网站的证书错误。请尽快更换证书解决该问题。\r\n\r\n如果您不想再接收关于该网站的邮件提醒，请点击下面的链接取消订阅:\r\n\r\n" . $unsublink . "\r\n\r\n\r\n 祝您健康愉快,\r\n网站证书过期检测提醒 by 香菇肥牛\r\nhttps://" . $current_link . "";
       $message = wordwrap($message, 70, "\r\n");
-      $headers = 'From: noreply@' . $current_domain . "\r\n" .
-          'Content-Type: text/html; charset=UTF-8' . "\r\n" .
-          'Reply-To: noreply@' . $current_domain . "\r\n" .
-          'Return-Path: noreply@' . $current_domain . "\r\n" .
-          'X-Visitor-IP: ' . $visitor_ip . "\r\n" .
-          'X-Coffee: Black' . "\r\n" .
-          'List-Unsubscribe: <https://' . $current_link . "/unsubscribe.php?id=" . $id . ">" . "\r\n" .
-          'X-Mailer: PHP/4.1.1';  
+      $headers = array ('From' => $email_from, 'To' => $to, 'Subject' => $subject, 'Reply-To' => $replyto_address, 'Content-Type'  => 'text/html; charset=UTF-8', 'X-Visitor-IP' => $visitor_ip, 'List-Unsubscribe' => $unsublink);
 
-      if (mail($to, $subject, $message, $headers) === true) {
-          echo "\t\t邮件已发送至 $to.\n";
-          return true;
+      $smtp = Mail::factory('smtp', array ('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
+      $mail = $smtp->send($to, $headers, $message);
+
+      if (PEAR::isError($mail)) {
+        echo("<p>邮件发送失败 " . $mail->getMessage() . "</p>");
+        return false;
       } else {
-          echo "\t\t无法发送邮件。\n";
-          return false;
+        echo("<p>Message successfully sent!</p>");
+        return true;
       }
+
     } 
   }
   
@@ -172,22 +178,19 @@ function send_expires_in_email($days, $domain, $email, $raw_cert) {
       $subject = "网站 " . htmlspecialchars($domain) . " 的证书将于 " . htmlspecialchars($days) . " 天后过期";
       $message = "您好，\r\n\r\n您之前申请了域名 " . htmlspecialchars($domain) . " 的网站证书过期检测服务。\r\n\r\n我们发现下列域名的证书链中的某一证书将于 " . htmlspecialchars($days) . " 天后过期:\r\n\r\n域名: " . htmlspecialchars($domain) . "\r\n证书通用名: " . htmlspecialchars($cert_cn) . "\r\n证书标题: " . htmlspecialchars($cert_subject) . "\r\n证书序列号: " . htmlspecialchars($cert_serial) . "\r\n证书有效期始于: " . htmlspecialchars(date("Y-m-d  H:i:s T", $cert_validfrom_date)) . " (" . $cert_valid_days_ago . " 天前)\r\n证书有效期止于: " . htmlspecialchars(date("Y-m-d  H:i:s T", $cert_expiry_date)) . " (剩余 " . $cert_valid_days_ahead . " 天)\r\n\r\n请您在证书到期前续费或更换证书。\r\n\r\n若证书到期前仍未续费或更换，您的网站将发生证书错误，并将使所有访客知悉。\r\n\r\n若您不想再接受关于该域名的网站证书过期提醒邮件，请点击下面的链接取消订阅:\r\n\r\n" . $unsublink . "\r\n\r\n\r\n 祝您健康愉快,\r\n网站证书过期检测 by 香菇肥牛\r\nhttps://" . $current_link . "";
       $message = wordwrap($message, 70, "\r\n");
-      $headers = 'From: noreply@' . $current_domain . "\r\n" .
-          'Content-Type: text/html; charset=UTF-8' . "\r\n" .
-          'Reply-To: noreply@' . $current_domain . "\r\n" .
-          'Return-Path: noreply@' . $current_domain . "\r\n" .
-          'X-Visitor-IP: ' . $visitor_ip . "\r\n" .
-          'X-Coffee: Black' . "\r\n" .
-          'List-Unsubscribe: <https://' . $current_link . "/unsubscribe.php?id=" . $id . ">" . "\r\n" .
-          'X-Mailer: PHP/4.1.1';  
+      $headers = array ('From' => $email_from, 'To' => $to, 'Subject' => $subject, 'Reply-To' => $replyto_address, 'Content-Type'  => 'text/html; charset=UTF-8', 'X-Visitor-IP' => $visitor_ip, 'List-Unsubscribe' => $unsublink);
 
-      if (mail($to, $subject, $message, $headers) === true) {
-          echo "\t\t邮件已发送至 $to.\n";
-          return true;
+      $smtp = Mail::factory('smtp', array ('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
+      $mail = $smtp->send($to, $headers, $message);
+
+      if (PEAR::isError($mail)) {
+        echo("<p>邮件发送失败 " . $mail->getMessage() . "</p>");
+        return false;
       } else {
-          echo "\t\t无法发送邮件。\n";
-          return false;
+        echo("<p>Message successfully sent!</p>");
+        return true;
       }
+
     } 
   }
 }
