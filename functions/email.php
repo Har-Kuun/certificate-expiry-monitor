@@ -70,7 +70,7 @@ function send_error_mail($domain, $email, $errors) {
         echo("<p>邮件发送失败 " . $mail->getMessage() . "</p>");
         return false;
       } else {
-        echo("<p>Message successfully sent!</p>");
+        echo("<p>邮件发送成功！</p>");
         return true;
       }
 
@@ -128,7 +128,7 @@ function send_cert_expired_email($days, $domain, $email, $raw_cert) {
         echo("<p>邮件发送失败 " . $mail->getMessage() . "</p>");
         return false;
       } else {
-        echo("<p>Message successfully sent!</p>");
+        echo("<p>邮件发送成功！</p>");
         return true;
       }
 
@@ -187,7 +187,7 @@ function send_expires_in_email($days, $domain, $email, $raw_cert) {
         echo("<p>邮件发送失败 " . $mail->getMessage() . "</p>");
         return false;
       } else {
-        echo("<p>Message successfully sent!</p>");
+        echo("<p>邮件发送成功！</p>");
         return true;
       }
 
