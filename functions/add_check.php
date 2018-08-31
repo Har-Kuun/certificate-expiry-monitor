@@ -19,13 +19,6 @@ error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
 set_include_path("." . PATH_SEPARATOR . ($UserDir = dirname($_SERVER['DOCUMENT_ROOT'])) . "/pear/php" . PATH_SEPARATOR . get_include_path());
 require_once "Mail.php";
 
-$host = "ssl://smtp.sendgrid.net";
-$username = "apikey";
-$password = "xx.xxxxxxxx";
-$port = "465";
-$email_from = "noreply@example.com";
-$replyto_address = "info@example.com";
-
 function add_domain_check($id,$visitor_ip) {
     global $current_domain;
     global $current_link;
@@ -125,6 +118,12 @@ IP地址 : " . htmlspecialchars($visitor_ip) . "
 网站证书过期检测提醒 by 香菇肥牛
 https://" . $current_link . "";
     $message = wordwrap($message, 70, "\r\n");
+    $host = "ssl://smtp.sendgrid.net";
+    $username = "apikey";
+    $password = "xx.xxxxx";
+    $port = "465";
+    $email_from = "noreply@example.com";
+    $replyto_address = "noreply@example.com";
     $headers = array ('From' => $email_from, 'To' => $to, 'Subject' => $subject, 'Reply-To' => $replyto_address, 'Content-Type'  => 'text/html; charset=UTF-8', 'X-Visitor-IP' => $visitor_ip, 'List-Unsubscribe' => $unsublink);
 
     $smtp = Mail::factory('smtp', array ('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
