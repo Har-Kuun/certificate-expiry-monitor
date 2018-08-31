@@ -1,8 +1,10 @@
-# Certificate Expiry Monitor
+## About the fork:
 
 This is the Chinese-simplified version of the original Certficate Expiry Monitor.  Example site in Chinese Simplified: https://ssl.qing.su/
 
-Version 1.3 was forked and translated.  Other codes were kept untouched.
+Version 1.3 was forked and translated.  The original php mail() was replaced with Pear mail function.  If you would like to restore the old mail() function, please change the related .php files in /functions/ directory accordingly.
+
+# Certificate Expiry Monitor
 
 ## About
 
