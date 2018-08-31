@@ -14,6 +14,18 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+error_reporting(E_ALL ^ E_NOTICE ^ E_DEPRECATED ^ E_STRICT);
+
+set_include_path("." . PATH_SEPARATOR . ($UserDir = dirname($_SERVER['DOCUMENT_ROOT'])) . "/pear/php" . PATH_SEPARATOR . get_include_path());
+require_once "Mail.php";
+
+$host = "ssl://smtp.sendgrid.net";
+$username = "apikey";
+$password = "xx.xxxxxxxx";
+$port = "465";
+$email_from = "noreply@example.com";
+$replyto_address = "info@example.com";
+
 function remove_domain_check($id,$visitor_ip) {
     global $current_domain;
     global $current_link;
@@ -83,20 +95,17 @@ function remove_domain_check($id,$visitor_ip) {
         $subject = "域名 " . htmlspecialchars($deleted_json_a[$id]['domain']) . "的网站证书过期检测提醒服务已取消";
         $message = "您好，\r\n\r\n您的网站证书过期提醒服务已经取消。\r\n\r\n域名: " . trim(htmlspecialchars($deleted_json_a[$id]['domain'])) . "\r\n邮箱: " . trim(htmlspecialchars($deleted_json_a[$id]['email'])) . "\r\nIP地址: " . htmlspecialchars($visitor_ip) . "\r\n日期: " . date("Y-m-d H:i:s") . "\r\n\r\n我们将不再检测该网站的证书过期时间，您也不会再收到关于该网站的证书过期提醒。\r\n\r\n如果您想重新添加该域名，请访问我们的网站: \r\n\r\n  " . $link . "\r\n\r\n祝您健康愉快,\r\n网站证书过期检测提醒 by 香菇肥牛\r\nhttps://" . $current_link . "";
         $message = wordwrap($message, 70, "\r\n");
-        $headers = 'From: noreply@' . $current_domain . "\r\n" .
-            'Reply-To: noreply@' . $current_domain . "\r\n" .
-            'Return-Path: noreply@' . $current_domain . "\r\n" .
-            'X-Visitor-IP: ' . $visitor_ip . "\r\n" .
-            'X-Coffee: Black' . "\r\n" .
-            'Content-Type: text/html; charset=UTF-8' . "\r\n" .
-            'List-Unsubscribe: <https://' . $current_link . "/unsubscribe.php?id=" . $id . ">" . "\r\n" .
-            'X-Mailer: PHP/4.1.1';
+        $headers = array ('From' => $email_from, 'To' => $to, 'Subject' => $subject, 'Reply-To' => $replyto_address, 'Content-Type'  => 'text/html; charset=UTF-8', 'X-Visitor-IP' => $visitor_ip, 'List-Unsubscribe' => $unsublink);
 
-        if (mail($to, $subject, $message, $headers) === true) {
-            $result['success'][] = true;
+        $smtp = Mail::factory('smtp', array ('host' => $host, 'port' => $port, 'auth' => true, 'username' => $username, 'password' => $password));
+        $mail = $smtp->send($to, $headers, $message);
+
+        if (PEAR::isError($mail)) {
+            echo("<p>邮件发送失败 " . $mail->getMessage() . "</p>");
+            return false;
         } else {
-            $result['errors'][] = "无法发送邮件。";
-            return $result;
+            echo("<p>邮件发送成功！</p>");
+            return true;
         }
         return $result;
     }
