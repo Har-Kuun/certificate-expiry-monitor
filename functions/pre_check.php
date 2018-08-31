@@ -82,11 +82,11 @@ function add_domain_to_pre_check($domain,$email,$visitor_ip) {
 
     $to      = $email;
     $subject = "请确认域名 " . htmlspecialchars($domain) . " 的网站证书过期提醒";
-    $message = "您好，\r\n\r\n您申请使用网站证书过期检测提醒服务。\r\n\r\n请点击链接确认该服务。如果您没有申请过我们的服务，请无视这封邮件。\r\n\r\n\r\n域名: " . trim(htmlspecialchars($domain)) . "\r\n邮箱: " . trim(htmlspecialchars($email)) . "\r\nIP地址: " . htmlspecialchars($visitor_ip) . "\r\n日期: " . date("Y-m-d H:i:s T") . "\r\n\r\n请点击下面的链接确认使用我们的服务: \r\n\r\n" . $sublink . "\r\n\r\n\r\n祝您健康愉快,\r\n网站证书过期检测提醒 by 香菇肥牛";
-    $message = wordwrap($message, 70, "\r\n");
+    $message = "您好，<br /><br />您申请使用网站证书过期检测提醒服务。<br /><br />请点击链接确认该服务。如果您没有申请过我们的服务，请无视这封邮件。<br /><br /><br />域名: " . trim(htmlspecialchars($domain)) . "<br />邮箱: " . trim(htmlspecialchars($email)) . "<br />IP地址: " . htmlspecialchars($visitor_ip) . "<br />日期: " . date("Y-m-d H:i:s T") . "<br /><br />请点击下面的链接确认使用我们的服务: <br /><br />" . $sublink . "<br /><br /><br />祝您健康愉快,<br />网站证书过期检测提醒 by 香菇肥牛";
+    $message = wordwrap($message, 70, "<br />");
     $host = "ssl://smtp.sendgrid.net";
     $username = "apikey";
-    $password = "xx.xxxxx";
+    $password = "qing.su";
     $port = "465";
     $email_from = "noreply@example.com";
     $replyto_address = "noreply@example.com";
@@ -99,7 +99,6 @@ function add_domain_to_pre_check($domain,$email,$visitor_ip) {
       echo("<p>邮件发送失败 " . $mail->getMessage() . "</p>");
       return false;
     } else {
-      echo("<p>邮件发送成功！</p>");
       return true;
     }
 
