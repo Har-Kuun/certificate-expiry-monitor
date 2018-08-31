@@ -114,6 +114,7 @@ IP地址 : " . htmlspecialchars($visitor_ip) . "
 https://" . $current_link . "";
     $message = wordwrap($message, 70, "\r\n");
     $headers = 'From: noreply@' . $current_domain . "\r\n" .
+        'Content-Type: text/html; charset=UTF-8' . "\r\n" .
         'Reply-To: noreply@' . $current_domain . "\r\n" .
         'Return-Path: noreply@' . $current_domain . "\r\n" .
         'X-Visitor-IP: ' . $visitor_ip . "\r\n" .
