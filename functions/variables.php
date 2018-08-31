@@ -33,8 +33,8 @@ $current_link = "ssl.qing.su";
 
 // set this to a location outside of your webroot so that it cannot be accessed via the internets.
 
-$pre_check_file = '/home/certmon/domains/certificatemonitor.org/cert-monitor/pre_checks.json';
-$check_file = '/home/certmon/domains/certificatemonitor.org/cert-monitor/checks.json';
-$deleted_check_file = '/home/certmon/domains/certificatemonitor.org/cert-monitor/deleted_checks.json';
+$pre_check_file = '/srv/www/ssl.qing.su/db/pre_checks.json';
+$check_file = '/srv/www/ssl.qing.su/db/checks.json';
+$deleted_check_file = '/srv/www/ssl.qing.su/db/deleted_checks.json';
 
 ?>
