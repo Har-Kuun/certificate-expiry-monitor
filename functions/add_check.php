@@ -99,28 +99,28 @@ function add_domain_check($id,$visitor_ip) {
 
     $to      = $json_a[$id]['email'];
     $subject = "网站证书过期检测提醒已确认: " . htmlspecialchars($json_a[$id]['domain']) . ".";
-    $message = "您好,
+    $message = "您好,<br /><br />
 
-我们已收到您申请使用我们的证书过期检测提醒服务的请求，并且我们已经确认了您的网站。
+我们已收到您申请使用我们的证书过期检测提醒服务的请求，并且我们已经确认了您的网站。<br /><br />
   
-域名   : " . trim(htmlspecialchars($json_a[$id]['domain'])) . "
-邮箱   : " . trim(htmlspecialchars($json_a[$id]['email'])) . "
-IP地址 : " . htmlspecialchars($visitor_ip) . "
-日期   : " . date("Y-m-d H:i:s T") . "
+域名   : " . trim(htmlspecialchars($json_a[$id]['domain'])) . "<br />
+邮箱   : " . trim(htmlspecialchars($json_a[$id]['email'])) . "<br />
+IP地址 : " . htmlspecialchars($visitor_ip) . "<br />
+日期   : " . date("Y-m-d H:i:s T") . "<br /><br />
 
-我们将为您检测该网站的证书。您将在证书即将过期时收到我们的邮件提醒。您可以点击以下链接查看常见问题: https://" . $current_link . ".
+我们将为您检测该网站的证书。您将在证书即将过期时收到我们的邮件提醒。您可以点击以下链接查看常见问题: <br />https://" . $current_link . ".<br /><br />
 
-如果您不再希望收到我们的邮件提醒，可以点击下面的链接取消订阅: 
+如果您不再希望收到我们的邮件提醒，可以点击下面的链接取消订阅: <br /><br />
 
-  " . $unsublink . "
+  " . $unsublink . "<br /><br />
 
-祝您健康顺利!
-网站证书过期检测提醒 by 香菇肥牛
+祝您健康顺利!<br />
+网站证书过期检测提醒 by 香菇肥牛<br />
 https://" . $current_link . "";
-    $message = wordwrap($message, 70, "\r\n");
+    $message = wordwrap($message, 70, "<br />");
     $host = "ssl://smtp.sendgrid.net";
-    $username = "apikey";
-    $password = "xx.xxxxx";
+    $username = "Har-Kuun";
+    $password = "https://qing.su";
     $port = "465";
     $email_from = "noreply@example.com";
     $replyto_address = "noreply@example.com";
@@ -133,7 +133,6 @@ https://" . $current_link . "";
         echo("<p>邮件发送失败 " . $mail->getMessage() . "</p>");
         return false;
     }   else {
-        echo("<p>邮件发送成功！</p>");
         return true;
     }
 
