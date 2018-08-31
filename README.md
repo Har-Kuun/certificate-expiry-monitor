@@ -45,7 +45,7 @@ Create the database files, outside of your webroot. If you create these inside y
     touch /srv/www/ssl.qing.su/db/pre_checks.json
     touch /srv/www/ssl.qing.su/db/checks.json
     touch /srv/www/ssl.qing.su/db/deleted_checks.json
-    chown -R www-data /var/www/certificate-expiry-monitor-db/*.json
+    chown -R www-data /srv/www/ssl.qing.su/db/*.json
 
 These files are used by the tool as database for checks.
 
